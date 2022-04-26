@@ -1,0 +1,6 @@
+<page>
+   <item name="warMap.scene" props="" ifExport="内嵌模式" aName=""/>
+   <item name="home.scene" props="" ifExport="内嵌模式" aName=""/>
+   <item name="study.scene" props="" ifExport="内嵌模式" aName=""/>
+   <item name="room.scene" props="" ifExport="内嵌模式" aName=""/>
+</page>

@@ -1,0 +1,4 @@
+{
+  "code": "export class ResM {\r\n    constructor() {\r\n    }\r\n    static perLoadArr() {\r\n        var arr = [\r\n            { \"url\": \"res/atlas/res/area.atlas\", type: Laya.Loader.ATLAS },\r\n        ];\r\n        return arr;\r\n    }\r\n}\r\n",
+  "references": []
+}

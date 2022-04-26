@@ -1,0 +1,4 @@
+{
+  "code": "export class WxShare {\r\n    constructor() {\r\n    }\r\n    static getIns() {\r\n        if (!this._ins) {\r\n            this._ins = new WxShare();\r\n        }\r\n        return this._ins;\r\n    }\r\n    setShareCfg() {\r\n        wx[\"onShareAppMessage\"](function () {\r\n            return {\r\n                title: '你们统统是二师兄的菜 ',\r\n                imageUrlId: 'EtDwOTtAQw6P1q0yLqOejQ==',\r\n                imageUrl: 'https://mmocgame.qpic.cn/wechatgame/26YI6fMJCDFDLiaI6aGZ1xibudYtfGicAbib7sye36wB26HKltktPUw2O5lPibFmPAHxK/0'\r\n            };\r\n        });\r\n    }\r\n}\r\n",
+  "references": []
+}

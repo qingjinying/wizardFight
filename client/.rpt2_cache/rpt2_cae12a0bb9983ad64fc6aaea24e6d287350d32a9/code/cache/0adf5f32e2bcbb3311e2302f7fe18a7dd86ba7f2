@@ -1,0 +1,7 @@
+{
+  "code": "import { E, EventName } from \"../manager/E\";\r\nimport { StudyView } from \"../view/StudyView\";\r\nexport class StudyCtrl {\r\n    constructor() {\r\n        this._view = new StudyView();\r\n        E.ins.on(EventName.openStudy, this, this.showView);\r\n    }\r\n    showView() {\r\n        this._view.open();\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/demo1/myLaya/src/manager/E.ts",
+    "C:/game/demo1/myLaya/src/view/StudyView.ts"
+  ]
+}

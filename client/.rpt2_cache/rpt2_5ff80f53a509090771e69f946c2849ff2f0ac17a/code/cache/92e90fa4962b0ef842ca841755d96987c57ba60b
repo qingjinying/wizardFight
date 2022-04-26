@@ -1,0 +1,7 @@
+{
+  "code": "import { HomeCtrl } from \"../controller/HomeCtrl\";\r\nimport { StudyCtrl } from \"../controller/StudyCtrl\";\r\nexport class GameCtrl {\r\n    constructor() {\r\n        this.init();\r\n    }\r\n    init() {\r\n        new HomeCtrl();\r\n        new StudyCtrl();\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/myLaya/src/controller/HomeCtrl.ts",
+    "C:/game/myLaya/src/controller/StudyCtrl.ts"
+  ]
+}

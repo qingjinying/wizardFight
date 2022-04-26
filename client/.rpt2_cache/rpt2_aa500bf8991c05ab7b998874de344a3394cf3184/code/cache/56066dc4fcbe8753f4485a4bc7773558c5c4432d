@@ -1,0 +1,7 @@
+{
+  "code": "import { E, EventName } from \"../manager/E\";\r\nimport { ui } from \"../ui/layaMaxUI\";\r\nexport class RoomView extends ui.roomUI {\r\n    constructor() {\r\n        super();\r\n        this.width = Laya.stage.width;\r\n        this.height = Laya.stage.height;\r\n        console.log(this.width, this.height);\r\n        this.leave_btn.on(Laya.Event.MOUSE_DOWN, this, this._leaveRoom);\r\n    }\r\n    _leaveRoom() {\r\n        E.ins.event(EventName.openHome);\r\n        this.close();\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/myLaya/src/manager/E.ts",
+    "C:/game/myLaya/src/ui/layaMaxUI.ts"
+  ]
+}

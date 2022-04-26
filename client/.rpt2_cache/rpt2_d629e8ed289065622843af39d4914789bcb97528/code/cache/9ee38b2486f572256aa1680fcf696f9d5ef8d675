@@ -1,0 +1,4 @@
+{
+  "code": "export class Role {\r\n    constructor() {\r\n        this.init();\r\n    }\r\n    static getIns() {\r\n        if (!this._ins) {\r\n            this._ins = new Role();\r\n        }\r\n        return this._ins;\r\n    }\r\n    init() {\r\n        this.socket = new Laya.Socket();\r\n        this.socket.connectByUrl(\"ws://127.0.0.1:3000\");\r\n        this.socket.on(Laya.Event.OPEN, this, this.onSocketOpen);\r\n        this.socket.on(Laya.Event.CLOSE, this, this.onSocketClose);\r\n        this.socket.on(Laya.Event.MESSAGE, this, this.onMessageRev);\r\n        this.socket.on(Laya.Event.ERROR, this, this.onConnectError);\r\n    }\r\n    onSocketOpen() {\r\n        console.log(\"成功建立websocket链接\");\r\n    }\r\n    onSocketClose() {\r\n        console.log(\"关闭websocket连接\");\r\n    }\r\n    onConnectError(error) {\r\n        console.log(error);\r\n    }\r\n    onMessageRev(res) {\r\n        console.log(res);\r\n    }\r\n}\r\n",
+  "references": []
+}

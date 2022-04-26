@@ -1,0 +1,7 @@
+{
+  "code": "import { TerritoryTbl } from \"../Tbl/TerritoryTbl\";\r\nimport { TerritoryData } from \"./TerritoryData\";\r\nexport class WarData {\r\n    constructor() {\r\n        this.gold = 1200;\r\n        this.round = 1;\r\n        this.terMap = {};\r\n        this.myId = 2;\r\n        this.currentId = 2;\r\n        let cfgArr = TerritoryTbl.getIns().getAll();\r\n        for (let cfg of cfgArr) {\r\n            this.terMap[cfg.id] = new TerritoryData(cfg, this);\r\n        }\r\n    }\r\n    isMyTer(areaID) {\r\n        let terData = this.terMap[areaID];\r\n        return terData.ownerId === this.myId;\r\n    }\r\n    getOtherMsg(areaID) {\r\n        let terData = this.terMap[areaID];\r\n        if (terData.ownerId > 1) {\r\n            return \"这是敌方势力，主公宜小心应对\";\r\n        }\r\n        else {\r\n            return \"这是无主的领地，主公宜早取之\";\r\n        }\r\n    }\r\n    getCurrentTer() {\r\n        let terData = this.terMap[this.currentId];\r\n        return terData;\r\n    }\r\n    getTerById(areaID) {\r\n        return this.terMap[areaID];\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/myLaya/src/Tbl/TerritoryTbl.ts",
+    "C:/game/myLaya/src/model/TerritoryData.ts"
+  ]
+}

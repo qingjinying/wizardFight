@@ -1,0 +1,7 @@
+{
+  "code": "import { E, EventName } from \"../manager/E\";\r\nimport { ui } from \"../ui/layaMaxUI\";\r\nexport class StudyView extends ui.studyUI {\r\n    constructor() {\r\n        super();\r\n        this.btn_back.y = Laya.stage.height - 120;\r\n        this.btn_back.on(Laya.Event.CLICK, this, this.onBack);\r\n    }\r\n    onBack() {\r\n        E.ins.event(EventName.openHome);\r\n        this.close();\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/demo1/myLaya/src/manager/E.ts",
+    "C:/game/demo1/myLaya/src/ui/layaMaxUI.ts"
+  ]
+}

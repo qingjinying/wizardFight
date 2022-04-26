@@ -1,0 +1,4 @@
+{
+  "code": "export class E extends Laya.EventDispatcher {\r\n    static get ins() {\r\n        return this._ins;\r\n    }\r\n}\r\nE._ins = new E();\r\nexport var EventName;\r\n(function (EventName) {\r\n    EventName[\"openHome\"] = \"openHome\";\r\n    EventName[\"startGame\"] = \"startGame\";\r\n})(EventName || (EventName = {}));\r\n",
+  "references": []
+}

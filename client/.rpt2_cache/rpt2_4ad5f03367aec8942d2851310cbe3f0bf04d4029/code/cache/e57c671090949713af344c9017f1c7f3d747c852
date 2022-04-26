@@ -1,0 +1,6 @@
+{
+  "code": "import { ui } from \"../ui/layaMaxUI\";\r\nexport class WarMap extends ui.warMapUI {\r\n    constructor() {\r\n        super();\r\n        this.flo = false;\r\n        this.area2.on(Laya.Event.MOUSE_DOWN, this, this.mouseDown);\r\n    }\r\n    mouseDown() {\r\n        console.log(this.area2.graphics.getBoundPoints());\r\n        this.flo = !this.flo;\r\n        let skinUrl = this.flo ? \"res/other/area3.png\" : \"res/other/area2.png\";\r\n        this.area2.loadImage(skinUrl);\r\n    }\r\n}\r\n",
+  "references": [
+    "C:/game/demo1/myLaya/src/ui/layaMaxUI.ts"
+  ]
+}
