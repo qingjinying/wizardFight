@@ -1,4 +1,4 @@
-import { RoleState, RoomState } from "../common/code";
+import { CardID, FightState, RoleState, RoomState, RoundState } from "../common/code";
 
 //所有来自客户端的协议key枚举
 export enum MsgKey {
@@ -14,8 +14,10 @@ export enum MsgKey {
 //所有服务器主动推送的协议key
 export enum MsgKeyPush {
     roleInfo = "roleInfo",
-    roomRoleState =  "roomRoleState", //玩家状态
+    roomInfo =  "roomInfo",
+    fightInfo = "fightInfo",
     pvpStart = "pvpStart",  //开始
+    gameOver = "gameOver",
 }
 
 //来自客户端的协议
@@ -35,7 +37,6 @@ export class SetSendCardMsg {
 }
 
 
-
 //服务器发送的协议
 export class MsgSend {
     key: string;
@@ -46,12 +47,6 @@ export class MsgSend {
 export class roleStateMsg {
     roleId: number;
     state: RoleState;
-}
-
-//一个房间的信息
-export class roomMsg {
-    roomId: number;
-    memberList: roleBaseInfo[];
 }
 
 //一个玩家的基本信息
@@ -67,20 +62,31 @@ export class roomBaseInfo {
     memberList: roleBaseInfo[];
 }
 
-/**
- * id
- * 状态 等待中，游戏中
- * 房间的成员信息 玩家的基本信息
- * 当前回合
- * 
- * 战斗数据 变化时更新
- * 成员的战斗数据 手牌，魔力值
- * 
- * 战斗区，玩家的出牌结果
- * 
- * 第一回合开始
- * 玩家拿到手牌和魔力值，客户端开始倒计时
- * 
- * 展示出牌和战斗结果，玩家手牌清空并扣除魔力值
- * 
- */
+//一个房间的战斗数据
+export class roomFightInfo {
+    round: number;   //回合数
+    state: RoundState;  //回合状态
+    fightRoleList: fightRoleInfo[]; //玩家的战斗数据
+}
+
+//一个玩家的战斗数据
+export class fightRoleInfo {
+    public roleId: number; 
+    public blood: number;//血量
+    public magicValue: number;//魔力值
+    public isWin: boolean; //比赛结果
+    public fightState: FightState;//战斗状态，进攻or防守
+    public cardList: cardFightInfo[];//手牌数组
+    public curRoundCard: cardFightInfo; //当前回合打出的牌
+    public curCardIndex: number; //当前回合选择打出的牌下标，从1开始，0代表未打出
+}
+
+//一个卡牌的战斗数据
+export class cardFightInfo {
+    cardId: CardID;
+}
+
+//战斗结果
+export class fightResult {
+    winId: number; //获胜者id
+}

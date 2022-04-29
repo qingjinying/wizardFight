@@ -12,5 +12,8 @@ export enum EventName{
     openHome = "openHome",
     startGame = "startGame",
     openStudy = "openStudy",
+    roomInfo = "roomInfo",
+    fightInfo = "fightInfo",
+    gameOver = "gameOver",
     leaveRoom = "leaveRoom"
 }

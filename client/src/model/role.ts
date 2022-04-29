@@ -1,4 +1,6 @@
-import { MsgKeyPush, roleBaseInfo } from "../Msg/mainMsg";
+import { ErrMsg } from "../common/code";
+import { E, EventName } from "../manager/E";
+import { MsgKey, MsgKeyPush, MsgReceive, roleBaseInfo } from "../Msg/mainMsg";
 
 export class Role {
     private static _ins: Role;
@@ -45,21 +47,37 @@ export class Role {
             case MsgKeyPush.roleInfo:
                 self.receiveRoleInfo(data.data);
                 break;
-        
+            case MsgKey.createRoom:
+            case MsgKey.joinRoom:
+                if (typeof data.data == 'string') {
+                    if (data.data != ErrMsg.ok) {
+                        console.log(data.data);
+                    }
+                } else {
+                    E.ins.event(EventName.roomInfo, data.data);
+                }
+                break;
+            case MsgKeyPush.roomInfo:
+                E.ins.event(EventName.roomInfo, data.data);
+                break;
+            case MsgKeyPush.fightInfo:
+                E.ins.event(EventName.fightInfo, data.data);
+                break;
             default:
                 break;
         }
     }
 
-    private sendMsg(key: string, data: any) {
-        
+    public sendMsg(key: string, data: any) {
+        let msg = new MsgReceive();
+        msg.key = key;
+        if (data) {
+            msg.data = data;
+        }
+        this.socket.send(JSON.stringify(msg));
     }
 
     private receiveRoleInfo(data: roleBaseInfo) {
         this.id = data.roleId;
-    }
-
-    public createRoom() {
-        
     }
 }

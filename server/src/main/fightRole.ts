@@ -1,4 +1,5 @@
 import { CardID, ErrMsg, FightState, RoundState } from "../common/code";
+import { fightRoleInfo, MsgKeyPush } from "../message/mainMsg";
 import { Fight } from "../model/fight";
 import { FightCard } from "./fightCard";
 import { Role } from "./role";
@@ -19,6 +20,9 @@ export class FightRole {
     public fightState: FightState;//战斗状态，进攻or防守
     public cardList: FightCard[];//手牌数组
     public curRoundCard: FightCard; //当前回合打出的牌
+    public curCardIndex: number = 0; //当前回合选择打出的牌下标，从1开始，0代表未打出
+
+    private _clientInfo: fightRoleInfo = new fightRoleInfo();
     constructor(role: Role) {
         this.role = role;
     }
@@ -27,6 +31,25 @@ export class FightRole {
         this.blood = 1;
         this.magicValue = 0;
         this.isWin = true;
+    }
+
+    public getFightRoleInfo2Client() {
+        this._clientInfo.roleId = this.role.id;
+        this._clientInfo.blood = this.blood;
+        this._clientInfo.magicValue = this.magicValue;
+        this._clientInfo.isWin = this.isWin;
+        this._clientInfo.fightState = this.fightState;
+        this._clientInfo.cardList.length = 0;
+        for (let ele of this.cardList) {
+            this._clientInfo.cardList.push(ele.getCardFightInfo2Client());
+        }
+        if (this.curRoundCard) {
+            this._clientInfo.curRoundCard = this.curRoundCard.getCardFightInfo2Client();
+        } else {
+            this._clientInfo.curRoundCard = null;
+        }
+        this._clientInfo.curCardIndex = this.curCardIndex;
+        return this._clientInfo;
     }
 
     //设置战斗状态
@@ -83,10 +106,20 @@ export class FightRole {
 
         if (this.curRoundCard.magicValue > this.magicValue) {
             this.curRoundCard = null;
+            this.curCardIndex = 0;
             return;
         }
 
         this.magicValue -= this.curRoundCard.magicValue;
+    }
+
+    //删除打出的手牌
+    public delEmitCard() {
+        if (!this.curCardIndex) {
+            return;
+        }
+        this.cardList.splice(this.curCardIndex - 1, 1);
+        this.curCardIndex = 0;
     }
 
     //扣血
@@ -104,11 +137,13 @@ export class FightRole {
         if (this.fight.roundState != RoundState.start) {
             return ErrMsg.roundNotStart;
         }
-        let card = this.cardList[index];
+        let card = this.cardList[index - 1];
         if (!card) {
             return ErrMsg.cardNotHand;
         }
         this.curRoundCard = card;
+        this.curCardIndex = index;
+        this.fight.getRoomIns().publishAllMember(MsgKeyPush.roomInfo, this.fight.getRoomIns().getRoomInfo2Client());
         return ErrMsg.ok;
     }
 
@@ -118,6 +153,8 @@ export class FightRole {
             return ErrMsg.roundNotStart;
         }
         this.curRoundCard = null;
+        this.curCardIndex = 0;
+        this.fight.getRoomIns().publishAllMember(MsgKeyPush.roomInfo, this.fight.getRoomIns().getRoomInfo2Client());
         return ErrMsg.ok;
     }
 }

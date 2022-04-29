@@ -1,6 +1,7 @@
 import { CardID, FightState, RoundState } from "../common/code";
 import { FightRole } from "../main/fightRole";
 import { PvpRoom } from "../main/pvpRoom";
+import { MsgKeyPush, roomFightInfo } from "../message/mainMsg";
 
 /**
  * 战斗计算底层
@@ -17,6 +18,8 @@ export class Fight {
     public fightRoleList: FightRole[] = []; //玩家的战斗数据
     public attackRole: FightRole; //进攻方
     public defendRole: FightRole; //防守方
+
+    private _clientInfo: roomFightInfo = new roomFightInfo();
     constructor(room: PvpRoom) {
         this._room = room;
     }
@@ -28,6 +31,19 @@ export class Fight {
         for (let ele of this._room.memberList) {
             ele.fightRole.fight = this;
             this.fightRoleList.push(ele.fightRole);
+        }
+    }
+
+    public getRoomIns() {
+        return this._room;
+    }
+
+    public getRoomFightInfo2Client() {
+        this._clientInfo.round = this.curRound;
+        this._clientInfo.state = this.roundState;
+        this._clientInfo.fightRoleList.length = 0;
+        for (let ele of this.fightRoleList) {
+            this._clientInfo.fightRoleList.push(ele.getFightRoleInfo2Client());
         }
     }
 
@@ -79,7 +95,7 @@ export class Fight {
     public roundEnd() {
         this.roundState = RoundState.end; //更新状态
         this.reduceMagic(); //扣魔力
-
+        this.delEmitCard(); //删除打出手牌
         let attackCard = this.attackRole.curRoundCard;
         let defendCard = this.defendRole.curRoundCard;
         //攻方没出牌
@@ -121,6 +137,13 @@ export class Fight {
         }
     }
 
+    //删掉玩家打出的手牌
+    private delEmitCard() {
+        for (let ele of this.fightRoleList) {
+            ele.delEmitCard();
+        }
+    }
+
     /**
      * 检查是否分出胜负, 分出为true
      */
@@ -132,5 +155,13 @@ export class Fight {
             }
         }
         return false;
+    }
+
+    public getWinId(): number {
+        for (let ele of this.fightRoleList) {
+            if (ele.isWin) {
+                return ele.role.id;
+            }
+        }
     }
 }

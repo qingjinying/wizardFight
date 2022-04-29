@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
-    "selecteID":32,
+    "selectedBox":7,
+    "selecteID":33,
     "searchKey":"Scene",
     "props":{"width":500,"sceneColor":"#000000","height":1136},
     "nodeParent":-1,
-    "maxID":33,
+    "maxID":34,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -21,13 +21,14 @@
             "props":{"var":"topLine","top":10,"centerX":0},
             "nodeParent":2,
             "label":"topLine",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":7,
             "child":[
                 {
+                    "x":30,
                     "type":"Label",
                     "searchKey":"Label,round",
                     "props":{"y":20,"x":165,"var":"round","text":"第一回合","fontSize":36,"color":"#f8f8f8"},
@@ -41,6 +42,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,leave_btn",
                     "props":{"y":20,"x":357,"width":84,"var":"leave_btn","stateNum":"2","skin":"res/other/level_left.png","height":71},
@@ -50,6 +52,20 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":4,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"ProgressBar",
+                    "searchKey":"ProgressBar,timeProcess",
+                    "props":{"y":83,"x":159,"var":"timeProcess","value":1,"skin":"res/other/progressSoldier.png"},
+                    "nodeParent":7,
+                    "label":"timeProcess",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":33,
                     "child":[
                         ]
                 }]

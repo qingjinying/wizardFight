@@ -1,6 +1,6 @@
 import { ErrMsg, RoleState, RoomState } from "../common/code";
 import { PvpMgr } from "../manager/pvpMgr";
-import { MsgKeyPush, MsgSend, roleStateMsg, roomBaseInfo } from "../message/mainMsg";
+import { fightResult, MsgKeyPush, MsgSend, roleStateMsg, roomBaseInfo } from "../message/mainMsg";
 import { Fight } from "../model/fight";
 import { Role } from "./role";
 
@@ -29,6 +29,7 @@ export class PvpRoom {
         this.memberList.push(role);
         PvpMgr.getIns().roomAddRole(this, role);
         role.updateState(RoleState.room);
+        this.publishAllMember(MsgKeyPush.roomInfo, this.getRoomInfo2Client());
         return ErrMsg.ok;
     }
 
@@ -50,7 +51,7 @@ export class PvpRoom {
         if (this.memberList.length == 0) {
             PvpMgr.getIns().closeRoom(this);
         } else {
-            this.publishRoleState(role);
+            this.publishAllMember(MsgKeyPush.roomInfo, this.getRoomInfo2Client());
         }
         return ErrMsg.ok;
     }
@@ -58,7 +59,7 @@ export class PvpRoom {
     public roleReady(role: Role) {
         //更新并广播状态
         role.updateState(RoleState.ready);
-        this.publishRoleState(role);
+        this.publishAllMember(MsgKeyPush.roomInfo, this.getRoomInfo2Client());
 
         //所有人准备完成后就开始游戏
         if (this.memberList.length < ROOM_START_MEMBER) {
@@ -81,18 +82,11 @@ export class PvpRoom {
             return ErrMsg.gameAlreadyStart;
         }
         role.updateState(RoleState.room);
-        this.publishRoleState(role);
+        this.publishAllMember(MsgKeyPush.roomInfo, this.getRoomInfo2Client());
         return ErrMsg.ok;
     }
 
-    private publishRoleState(role: Role) {
-        let msg = new roleStateMsg();
-        msg.roleId = role.id;
-        msg.state = role.getState();
-        this.publishAllMember(MsgKeyPush.roomRoleState, msg);
-    }
-
-    private publishAllMember(key: string, data: any) {
+    public publishAllMember(key: string, data: any) {
         for (let member of this.memberList) {
             member.sendMsg(key, data);
         }
@@ -125,11 +119,13 @@ export class PvpRoom {
     public processRound() {
         let self = this;
         self.fightIns.roundStart();
+        this.publishAllMember(MsgKeyPush.fightInfo, this.fightIns.getRoomFightInfo2Client());
         setTimeout(() => {
             if (this.roomState != RoomState.play) {
                 return;
             }
             self.fightIns.roundEnd();
+            this.publishAllMember(MsgKeyPush.fightInfo, this.fightIns.getRoomFightInfo2Client());
             setTimeout(() => {
                 if (this.roomState != RoomState.play) {
                     return;
@@ -145,11 +141,16 @@ export class PvpRoom {
     }
 
     public gameOver() {
-        //修改状态,通知结果
         this.roomState = RoomState.wait;
         for (let ele of this.memberList) {
             ele.updateState(RoleState.room);
-            // ele.sendMsg();
         }
+        let msg = new fightResult();
+        msg.winId = this.fightIns.getWinId();
+        this.publishAllMember(MsgKeyPush.gameOver, msg);
+        let self = this;
+        setTimeout(() => {
+            self.publishAllMember(MsgKeyPush.roomInfo, this.getRoomInfo2Client());
+        }, 3000);
     }
 }

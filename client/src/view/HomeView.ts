@@ -1,3 +1,4 @@
+import { HomeCtrl } from "../controller/HomeCtrl";
 import { E, EventName } from "../manager/E";
 import { ui } from "../ui/layaMaxUI";
 
@@ -5,11 +6,13 @@ import { ui } from "../ui/layaMaxUI";
  * 首页
  */
 export class HomeView extends ui.homeUI {
+    private _ctrl: HomeCtrl;
     private _moveFlo: boolean = true;
     private _maxRightX: number = 0;
     private _maxLeftX: number = -500;
-    constructor() {
+    constructor(ctrl) {
         super();
+        this._ctrl = ctrl;
         this._moveBg();
         this.startBtn.on(Laya.Event.MOUSE_DOWN, this, this._changeColor_start);
         this.startBtn.on(Laya.Event.MOUSE_UP, this, this._startGame);
@@ -44,6 +47,7 @@ export class HomeView extends ui.homeUI {
         btn_text.color = "#ffffff";
         btn_text.bgColor = "#000000";
         E.ins.event(EventName.startGame);
+        this._ctrl.createRoom();
         this.close();
     }
 

@@ -1,8 +1,11 @@
 import { CardID } from "../common/code";
+import { cardFightInfo } from "../message/mainMsg";
 
 export class FightCard {
     public id: CardID;
     public magicValue: number; //打出需要消耗的魔力值
+
+    private _clientInfo: cardFightInfo = new cardFightInfo();
     public static getIns(id: CardID) {
         return new FightCard(id);
     }
@@ -10,6 +13,11 @@ export class FightCard {
     constructor(id: CardID) {
         this.id = id;
         this.init();
+    }
+
+    public getCardFightInfo2Client() {
+        this._clientInfo.cardId = this.id;
+        return this._clientInfo;
     }
 
     private init() {
